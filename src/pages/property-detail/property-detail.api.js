@@ -7,3 +7,7 @@ export const getPropertyDetails = (id) =>
 const equipmentUrl = `${process.env.BASE_API_URL}/equipments`;
 export const getEquipmentDetails = () =>
   Axios.get(equipmentUrl).then(({ data }) => data);
+
+const contactUrl = `${process.env.BASE_API_URL}/contact`;
+export const setContact = (contact) =>
+  Axios.post(contactUrl, contact).then(({ data }) => data);

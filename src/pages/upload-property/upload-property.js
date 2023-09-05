@@ -175,6 +175,11 @@ onUpdateField('locationUrl', (event) => {
     });
 });
 
+onUpdateField('equipments', (event) => {
+  const equipmentsArray = getCheckboxes('equipments');
+  propertyDetail = { ...propertyDetail, equipmentIds: equipmentsArray };
+});
+
 const getCheckboxes = (id) => {
   const checkboxes = document.querySelectorAll(`#${id} input[type="checkbox"]`);
   let checkboxMarcados = null;

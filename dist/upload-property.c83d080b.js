@@ -5065,6 +5065,12 @@ var propertyDetail = {
     (0, _helpers.onSetError)('locationUrl', result);
   });
 });
+(0, _helpers.onUpdateField)('equipments', function (event) {
+  var equipmentsArray = getCheckboxes('equipments');
+  propertyDetail = _objectSpread(_objectSpread({}, propertyDetail), {}, {
+    equipmentIds: equipmentsArray
+  });
+});
 var getCheckboxes = function getCheckboxes(id) {
   var checkboxes = document.querySelectorAll("#".concat(id, " input[type=\"checkbox\"]"));
   var checkboxMarcados = null;
@@ -5134,7 +5140,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "65116" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61257" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

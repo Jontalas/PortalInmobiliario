@@ -3,6 +3,7 @@ import {
   onSubmitForm,
   onSetError,
   onSetFormErrors,
+  onAddFile,
 } from '../../common/helpers';
 import {
   getSaleTypeList,
@@ -11,7 +12,10 @@ import {
   setProperty,
 } from './upload-property.api';
 import { formValidation } from './upload-property.validations';
-import { mapPropertyDetailVmToApi } from './upload-property.mappers';
+import {
+  mapPropertyDetailNums,
+  mapPropertyDetailVmToApi,
+} from './upload-property.mappers';
 import {
   setOptionList,
   setCheckboxList,
@@ -181,9 +185,8 @@ onUpdateField('equipments', (event) => {
   propertyDetail = { ...propertyDetail, equipments: equipmentsArray };
 });
 
-onUpdateField('add-image', (event) => {
-  const value = event.target.value;
-  onAddImage(value);
+onAddFile('add-image', (image) => {
+  onAddImage(image);
   const imagesArray = getImages('images');
   imagesArray.pop();
   propertyDetail = { ...propertyDetail, images: imagesArray };
@@ -253,10 +256,16 @@ onSubmitForm('save-button', () => {
   formValidation.validateForm(propertyDetail).then((result) => {
     onSetFormErrors(result);
     if (result.succeeded) {
-      const apiPropertyDetail = mapPropertyDetailVmToApi(propertyDetail);
-      setProperty(apiPropertyDetail);
-      alert('propiedad enviada correctamente');
-      window.location.href = '/pages/upload-property/upload-property.html';
+      onSave().then(() => {
+        alert('propiedad enviada correctamente');
+        window.location.href = '/pages/upload-property/upload-property.html';
+      });
     }
   });
 });
+
+const onSave = () => {
+  const numPropertyDetail = mapPropertyDetailNums(propertyDetail);
+  const apiPropertyDetail = mapPropertyDetailVmToApi(numPropertyDetail);
+  return setProperty(apiPropertyDetail);
+};

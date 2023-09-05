@@ -74,17 +74,10 @@ onSubmitForm('contact-button', () => {
   formValidation.validateForm(contact).then((result) => {
     onSetFormErrors(result);
     if (result.succeeded) {
-      setContact(contact);
-      alert('Pregunta enviada correctamente');
-      window.location.href = `/pages/property-detail/property-detail.html?id=${params.id}`;
+      setContact(contact).then(() => {
+        alert('Pregunta enviada correctamente');
+        window.location.href = `/pages/property-detail/property-detail.html?id=${params.id}`;
+      });
     }
   });
 });
-
-const clearForm = () => {
-  contact = { ...contact, email: '', message: '' };
-  const email = document.getElementById('email');
-  email.value = '';
-  const message = document.getElementById('message');
-  message.value = '';
-};

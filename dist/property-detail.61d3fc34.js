@@ -6848,22 +6848,13 @@ var contact = {
   _propertyList.formValidation.validateForm(contact).then(function (result) {
     (0, _helpers.onSetFormErrors)(result);
     if (result.succeeded) {
-      (0, _propertyDetail.setContact)(contact);
-      alert('Pregunta enviada correctamente');
-      window.location.href = "/pages/property-detail/property-detail.html?id=".concat(params.id);
+      (0, _propertyDetail.setContact)(contact).then(function () {
+        alert('Pregunta enviada correctamente');
+        window.location.href = "/pages/property-detail/property-detail.html?id=".concat(params.id);
+      });
     }
   });
 });
-var clearForm = function clearForm() {
-  contact = _objectSpread(_objectSpread({}, contact), {}, {
-    email: '',
-    message: ''
-  });
-  var email = document.getElementById('email');
-  email.value = '';
-  var message = document.getElementById('message');
-  message.value = '';
-};
 },{"../../common/helpers":"common/helpers/index.js","./property-detail.api":"pages/property-detail/property-detail.api.js","./property-list.validations":"pages/property-detail/property-list.validations.js","./property-detail.mappers":"pages/property-detail/property-detail.mappers.js","./property-detail.helpers":"pages/property-detail/property-detail.helpers.js","../../core/router":"core/router/index.js"}],"../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -6889,7 +6880,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50895" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53076" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

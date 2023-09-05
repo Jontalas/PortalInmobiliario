@@ -4818,7 +4818,37 @@ exports.formValidation = formValidation;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.mapPropertyDetailVmToApi = void 0;
+exports.mapPropertyDetailVmToApi = exports.mapPropertyDetailNums = void 0;
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+var mapPropertyDetailNums = function mapPropertyDetailNums(propertyDetail) {
+  return _objectSpread(_objectSpread({}, propertyDetail), {}, {
+    price: str2Nmbr(propertyDetail.price),
+    squareMeter: str2Nmbr(propertyDetail.squareMeter),
+    rooms: str2Nmbr(propertyDetail.rooms),
+    bathrooms: str2Nmbr(propertyDetail.bathrooms)
+  });
+};
+exports.mapPropertyDetailNums = mapPropertyDetailNums;
+var str2Nmbr = function str2Nmbr(valor) {
+  valor = valor.replace(/[^\d.]/g, '');
+  var partes = valor.split('.');
+  var entero = partes[0];
+  var decimal = partes[1] || '';
+  valor = entero + '.' + decimal;
+  var regex = /^0+$/;
+  if (regex.test(decimal) || decimal === '') {
+    valor = entero;
+  }
+  if (decimal !== '') {
+    valor = valor.replace(/0+$/, '');
+  }
+  return parseFloat(valor);
+};
 var mapPropertyDetailVmToApi = function mapPropertyDetailVmToApi(propertyDetail) {
   return {
     title: propertyDetail.title,
@@ -5099,9 +5129,8 @@ var propertyDetail = {
     equipments: equipmentsArray
   });
 });
-(0, _helpers.onUpdateField)('add-image', function (event) {
-  var value = event.target.value;
-  (0, _uploadProperty4.onAddImage)(value);
+(0, _helpers.onAddFile)('add-image', function (image) {
+  (0, _uploadProperty4.onAddImage)(image);
   var imagesArray = getImages('images');
   imagesArray.pop();
   propertyDetail = _objectSpread(_objectSpread({}, propertyDetail), {}, {
@@ -5164,13 +5193,18 @@ var getImages = function getImages(id) {
   _uploadProperty2.formValidation.validateForm(propertyDetail).then(function (result) {
     (0, _helpers.onSetFormErrors)(result);
     if (result.succeeded) {
-      var apiPropertyDetail = (0, _uploadProperty3.mapPropertyDetailVmToApi)(propertyDetail);
-      (0, _uploadProperty.setProperty)(apiPropertyDetail);
-      alert('propiedad enviada correctamente');
-      window.location.href = '/pages/upload-property/upload-property.html';
+      onSave().then(function () {
+        alert('propiedad enviada correctamente');
+        window.location.href = '/pages/upload-property/upload-property.html';
+      });
     }
   });
 });
+var onSave = function onSave() {
+  var numPropertyDetail = (0, _uploadProperty3.mapPropertyDetailNums)(propertyDetail);
+  var apiPropertyDetail = (0, _uploadProperty3.mapPropertyDetailVmToApi)(numPropertyDetail);
+  return (0, _uploadProperty.setProperty)(apiPropertyDetail);
+};
 },{"../../common/helpers":"common/helpers/index.js","./upload-property.api":"pages/upload-property/upload-property.api.js","./upload-property.validations":"pages/upload-property/upload-property.validations.js","./upload-property.mappers":"pages/upload-property/upload-property.mappers.js","./upload-property.helpers":"pages/upload-property/upload-property.helpers.js"}],"../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -5196,7 +5230,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50895" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53076" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

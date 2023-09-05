@@ -6850,7 +6850,7 @@ var contact = {
     if (result.succeeded) {
       (0, _propertyDetail.setContact)(contact);
       alert('Pregunta enviada correctamente');
-      clearForm();
+      window.location.href = "/pages/property-detail/property-detail.html?id=".concat(params.id);
     }
   });
 });
@@ -6889,7 +6889,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61257" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50895" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

@@ -11,11 +11,13 @@ import {
   setProperty,
 } from './upload-property.api';
 import { formValidation } from './upload-property.validations';
+import { mapPropertyDetailVmToApi } from './upload-property.mappers';
 import {
   setOptionList,
   setCheckboxList,
   onAddFeature,
   onRemoveFeature,
+  onAddImage,
 } from './upload-property.helpers';
 
 Promise.all([getSaleTypeList(), getProvinceList(), getEquipmentsList()]).then(
@@ -32,18 +34,17 @@ let propertyDetail = {
   email: '',
   phone: '',
   price: '',
-  saleTypeIds: '',
+  saleTypes: '',
   address: '',
   city: '',
-  provinceId: '',
+  province: '',
   squareMeter: '',
   rooms: '',
   bathrooms: '',
   locationUrl: '',
   mainFeatures: '',
-  equipmentIds: '',
-  mainImage: '',
-  images: '',
+  equipments: '',
+  images: [],
 };
 
 onUpdateField('title', (event) => {
@@ -93,10 +94,10 @@ onUpdateField('price', (event) => {
 
 onUpdateField('saleTypes', (event) => {
   const saleTypeArray = getCheckboxes('saleTypes');
-  propertyDetail = { ...propertyDetail, saleTypeIds: saleTypeArray };
+  propertyDetail = { ...propertyDetail, saleTypes: saleTypeArray };
 
   formValidation
-    .validateField('saleTypeIds', propertyDetail.saleTypeIds)
+    .validateField('saleTypes', propertyDetail.saleTypes)
     .then((result) => {
       onSetError('saleTypes', result);
     });
@@ -124,10 +125,10 @@ onUpdateField('city', (event) => {
 
 onUpdateField('province', (event) => {
   const value = event.target.value;
-  propertyDetail = { ...propertyDetail, provinceId: value };
+  propertyDetail = { ...propertyDetail, province: value };
 
   formValidation
-    .validateField('provinceId', propertyDetail.provinceId)
+    .validateField('province', propertyDetail.province)
     .then((result) => {
       onSetError('province', result);
     });
@@ -177,7 +178,15 @@ onUpdateField('locationUrl', (event) => {
 
 onUpdateField('equipments', (event) => {
   const equipmentsArray = getCheckboxes('equipments');
-  propertyDetail = { ...propertyDetail, equipmentIds: equipmentsArray };
+  propertyDetail = { ...propertyDetail, equipments: equipmentsArray };
+});
+
+onUpdateField('add-image', (event) => {
+  const value = event.target.value;
+  onAddImage(value);
+  const imagesArray = getImages('images');
+  imagesArray.pop();
+  propertyDetail = { ...propertyDetail, images: imagesArray };
 });
 
 const getCheckboxes = (id) => {
@@ -230,3 +239,24 @@ const removeFromArray = (valor, array) => {
     array.splice(indice, 1);
   }
 };
+
+const getImages = (id) => {
+  const imagenes = document.getElementById(id).getElementsByTagName('img');
+  let srcs = [];
+  for (let i = 0; i < imagenes.length; i++) {
+    srcs.push(imagenes[i].src);
+  }
+  return srcs;
+};
+
+onSubmitForm('save-button', () => {
+  formValidation.validateForm(propertyDetail).then((result) => {
+    onSetFormErrors(result);
+    if (result.succeeded) {
+      const apiPropertyDetail = mapPropertyDetailVmToApi(propertyDetail);
+      setProperty(apiPropertyDetail);
+      alert('propiedad enviada correctamente');
+      window.location.href = '/pages/upload-property/upload-property.html';
+    }
+  });
+});

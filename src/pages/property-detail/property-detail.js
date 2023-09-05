@@ -76,7 +76,7 @@ onSubmitForm('contact-button', () => {
     if (result.succeeded) {
       setContact(contact);
       alert('Pregunta enviada correctamente');
-      clearForm();
+      window.location.href = `/pages/property-detail/property-detail.html?id=${params.id}`;
     }
   });
 });

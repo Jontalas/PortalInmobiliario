@@ -47,7 +47,7 @@ const validationSchema = {
         message: 'Precio no válido',
       },
     ],
-    saleTypeIds: [
+    saleTypes: [
       {
         validator: Validators.required,
         message: 'Campo requerido',
@@ -65,7 +65,7 @@ const validationSchema = {
         message: 'Campo requerido',
       },
     ],
-    provinceId: [
+    province: [
       {
         validator: Validators.required,
         message: 'Campo requerido',

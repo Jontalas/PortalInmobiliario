@@ -4751,7 +4751,7 @@ var validationSchema = {
       },
       message: 'Precio no válido'
     }],
-    saleTypeIds: [{
+    saleTypes: [{
       validator: _fonk.Validators.required,
       message: 'Campo requerido'
     }],
@@ -4763,7 +4763,7 @@ var validationSchema = {
       validator: _fonk.Validators.required,
       message: 'Campo requerido'
     }],
-    provinceId: [{
+    province: [{
       validator: _fonk.Validators.required,
       message: 'Campo requerido'
     }],
@@ -4812,7 +4812,35 @@ var validationSchema = {
 };
 var formValidation = (0, _fonk.createFormValidation)(validationSchema);
 exports.formValidation = formValidation;
-},{"@lemoncode/fonk":"../node_modules/@lemoncode/fonk/dist/@lemoncode/fonk.esm.js","@lemoncode/fonk-array-required-validator":"../node_modules/@lemoncode/fonk-array-required-validator/dist/@lemoncode/fonk-array-required-validator.esm.js","@lemoncode/fonk-is-url-validator":"../node_modules/@lemoncode/fonk-is-url-validator/dist/@lemoncode/fonk-is-url-validator.esm.js"}],"pages/upload-property/upload-property.helpers.js":[function(require,module,exports) {
+},{"@lemoncode/fonk":"../node_modules/@lemoncode/fonk/dist/@lemoncode/fonk.esm.js","@lemoncode/fonk-array-required-validator":"../node_modules/@lemoncode/fonk-array-required-validator/dist/@lemoncode/fonk-array-required-validator.esm.js","@lemoncode/fonk-is-url-validator":"../node_modules/@lemoncode/fonk-is-url-validator/dist/@lemoncode/fonk-is-url-validator.esm.js"}],"pages/upload-property/upload-property.mappers.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.mapPropertyDetailVmToApi = void 0;
+var mapPropertyDetailVmToApi = function mapPropertyDetailVmToApi(propertyDetail) {
+  return {
+    title: propertyDetail.title,
+    notes: propertyDetail.notes,
+    email: propertyDetail.email,
+    phone: propertyDetail.phone,
+    price: propertyDetail.price,
+    saleTypeIds: propertyDetail.saleTypes,
+    address: propertyDetail.address,
+    city: propertyDetail.city,
+    provinceId: propertyDetail.province,
+    squareMeter: propertyDetail.squareMeter,
+    rooms: propertyDetail.rooms,
+    bathrooms: propertyDetail.bathrooms,
+    locationUrl: propertyDetail.locationUrl,
+    mainFeatures: propertyDetail.mainFeatures,
+    equipmentIds: propertyDetail.equipments,
+    images: propertyDetail.images
+  };
+};
+exports.mapPropertyDetailVmToApi = mapPropertyDetailVmToApi;
+},{}],"pages/upload-property/upload-property.helpers.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4907,7 +4935,8 @@ exports.onAddImage = onAddImage;
 var _helpers = require("../../common/helpers");
 var _uploadProperty = require("./upload-property.api");
 var _uploadProperty2 = require("./upload-property.validations");
-var _uploadProperty3 = require("./upload-property.helpers");
+var _uploadProperty3 = require("./upload-property.mappers");
+var _uploadProperty4 = require("./upload-property.helpers");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
@@ -4925,9 +4954,9 @@ Promise.all([(0, _uploadProperty.getSaleTypeList)(), (0, _uploadProperty.getProv
     saleTypeList = _ref2[0],
     provinceList = _ref2[1],
     equipmentsList = _ref2[2];
-  (0, _uploadProperty3.setOptionList)(provinceList, 'province');
-  (0, _uploadProperty3.setCheckboxList)(saleTypeList, 'saleTypes');
-  (0, _uploadProperty3.setCheckboxList)(equipmentsList, 'equipments');
+  (0, _uploadProperty4.setOptionList)(provinceList, 'province');
+  (0, _uploadProperty4.setCheckboxList)(saleTypeList, 'saleTypes');
+  (0, _uploadProperty4.setCheckboxList)(equipmentsList, 'equipments');
 });
 var propertyDetail = {
   title: '',
@@ -4935,18 +4964,17 @@ var propertyDetail = {
   email: '',
   phone: '',
   price: '',
-  saleTypeIds: '',
+  saleTypes: '',
   address: '',
   city: '',
-  provinceId: '',
+  province: '',
   squareMeter: '',
   rooms: '',
   bathrooms: '',
   locationUrl: '',
   mainFeatures: '',
-  equipmentIds: '',
-  mainImage: '',
-  images: ''
+  equipments: '',
+  images: []
 };
 (0, _helpers.onUpdateField)('title', function (event) {
   var value = event.target.value;
@@ -4996,9 +5024,9 @@ var propertyDetail = {
 (0, _helpers.onUpdateField)('saleTypes', function (event) {
   var saleTypeArray = getCheckboxes('saleTypes');
   propertyDetail = _objectSpread(_objectSpread({}, propertyDetail), {}, {
-    saleTypeIds: saleTypeArray
+    saleTypes: saleTypeArray
   });
-  _uploadProperty2.formValidation.validateField('saleTypeIds', propertyDetail.saleTypeIds).then(function (result) {
+  _uploadProperty2.formValidation.validateField('saleTypes', propertyDetail.saleTypes).then(function (result) {
     (0, _helpers.onSetError)('saleTypes', result);
   });
 });
@@ -5023,9 +5051,9 @@ var propertyDetail = {
 (0, _helpers.onUpdateField)('province', function (event) {
   var value = event.target.value;
   propertyDetail = _objectSpread(_objectSpread({}, propertyDetail), {}, {
-    provinceId: value
+    province: value
   });
-  _uploadProperty2.formValidation.validateField('provinceId', propertyDetail.provinceId).then(function (result) {
+  _uploadProperty2.formValidation.validateField('province', propertyDetail.province).then(function (result) {
     (0, _helpers.onSetError)('province', result);
   });
 });
@@ -5068,7 +5096,16 @@ var propertyDetail = {
 (0, _helpers.onUpdateField)('equipments', function (event) {
   var equipmentsArray = getCheckboxes('equipments');
   propertyDetail = _objectSpread(_objectSpread({}, propertyDetail), {}, {
-    equipmentIds: equipmentsArray
+    equipments: equipmentsArray
+  });
+});
+(0, _helpers.onUpdateField)('add-image', function (event) {
+  var value = event.target.value;
+  (0, _uploadProperty4.onAddImage)(value);
+  var imagesArray = getImages('images');
+  imagesArray.pop();
+  propertyDetail = _objectSpread(_objectSpread({}, propertyDetail), {}, {
+    images: imagesArray
   });
 });
 var getCheckboxes = function getCheckboxes(id) {
@@ -5087,7 +5124,7 @@ insertFeatureButton.addEventListener('click', function () {
   var newFeature = document.getElementById('newFeature');
   var value = newFeature.value;
   if (value !== '') {
-    (0, _uploadProperty3.onAddFeature)(value);
+    (0, _uploadProperty4.onAddFeature)(value);
     if (propertyDetail.mainFeatures === '') {
       propertyDetail.mainFeatures = [];
     }
@@ -5098,7 +5135,7 @@ insertFeatureButton.addEventListener('click', function () {
     var deleteButtonId = "delete-".concat(value, "-button");
     var deleteButton = document.getElementById(deleteButtonId);
     deleteButton.addEventListener('click', function () {
-      (0, _uploadProperty3.onRemoveFeature)(value);
+      (0, _uploadProperty4.onRemoveFeature)(value);
       removeFromArray(value, propertyDetail.mainFeatures);
       if (propertyDetail.mainFeatures.length === 0) {
         propertyDetail.mainFeatures = '';
@@ -5115,7 +5152,26 @@ var removeFromArray = function removeFromArray(valor, array) {
     array.splice(indice, 1);
   }
 };
-},{"../../common/helpers":"common/helpers/index.js","./upload-property.api":"pages/upload-property/upload-property.api.js","./upload-property.validations":"pages/upload-property/upload-property.validations.js","./upload-property.helpers":"pages/upload-property/upload-property.helpers.js"}],"../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+var getImages = function getImages(id) {
+  var imagenes = document.getElementById(id).getElementsByTagName('img');
+  var srcs = [];
+  for (var i = 0; i < imagenes.length; i++) {
+    srcs.push(imagenes[i].src);
+  }
+  return srcs;
+};
+(0, _helpers.onSubmitForm)('save-button', function () {
+  _uploadProperty2.formValidation.validateForm(propertyDetail).then(function (result) {
+    (0, _helpers.onSetFormErrors)(result);
+    if (result.succeeded) {
+      var apiPropertyDetail = (0, _uploadProperty3.mapPropertyDetailVmToApi)(propertyDetail);
+      (0, _uploadProperty.setProperty)(apiPropertyDetail);
+      alert('propiedad enviada correctamente');
+      window.location.href = '/pages/upload-property/upload-property.html';
+    }
+  });
+});
+},{"../../common/helpers":"common/helpers/index.js","./upload-property.api":"pages/upload-property/upload-property.api.js","./upload-property.validations":"pages/upload-property/upload-property.validations.js","./upload-property.mappers":"pages/upload-property/upload-property.mappers.js","./upload-property.helpers":"pages/upload-property/upload-property.helpers.js"}],"../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -5140,7 +5196,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61257" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50895" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

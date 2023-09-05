@@ -4818,22 +4818,28 @@ exports.formValidation = formValidation;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.mapPropertyDetailVmToApi = exports.mapPropertyDetailNums = void 0;
-function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
-function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
-function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
-function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
-var mapPropertyDetailNums = function mapPropertyDetailNums(propertyDetail) {
-  return _objectSpread(_objectSpread({}, propertyDetail), {}, {
+exports.mapPropertyDetailVmToApi = void 0;
+var mapPropertyDetailVmToApi = function mapPropertyDetailVmToApi(propertyDetail) {
+  return {
+    title: propertyDetail.title,
+    notes: propertyDetail.notes,
+    email: propertyDetail.email,
+    phone: propertyDetail.phone,
     price: str2Nmbr(propertyDetail.price),
+    saleTypeIds: propertyDetail.saleTypes,
+    address: propertyDetail.address,
+    city: propertyDetail.city,
+    provinceId: propertyDetail.province,
     squareMeter: str2Nmbr(propertyDetail.squareMeter),
     rooms: str2Nmbr(propertyDetail.rooms),
-    bathrooms: str2Nmbr(propertyDetail.bathrooms)
-  });
+    bathrooms: str2Nmbr(propertyDetail.bathrooms),
+    locationUrl: propertyDetail.locationUrl,
+    mainFeatures: propertyDetail.mainFeatures,
+    equipmentIds: propertyDetail.equipments,
+    images: propertyDetail.images
+  };
 };
-exports.mapPropertyDetailNums = mapPropertyDetailNums;
+exports.mapPropertyDetailVmToApi = mapPropertyDetailVmToApi;
 var str2Nmbr = function str2Nmbr(valor) {
   valor = valor.replace(/[^\d.]/g, '');
   var partes = valor.split('.');
@@ -4849,27 +4855,6 @@ var str2Nmbr = function str2Nmbr(valor) {
   }
   return parseFloat(valor);
 };
-var mapPropertyDetailVmToApi = function mapPropertyDetailVmToApi(propertyDetail) {
-  return {
-    title: propertyDetail.title,
-    notes: propertyDetail.notes,
-    email: propertyDetail.email,
-    phone: propertyDetail.phone,
-    price: propertyDetail.price,
-    saleTypeIds: propertyDetail.saleTypes,
-    address: propertyDetail.address,
-    city: propertyDetail.city,
-    provinceId: propertyDetail.province,
-    squareMeter: propertyDetail.squareMeter,
-    rooms: propertyDetail.rooms,
-    bathrooms: propertyDetail.bathrooms,
-    locationUrl: propertyDetail.locationUrl,
-    mainFeatures: propertyDetail.mainFeatures,
-    equipmentIds: propertyDetail.equipments,
-    images: propertyDetail.images
-  };
-};
-exports.mapPropertyDetailVmToApi = mapPropertyDetailVmToApi;
 },{}],"pages/upload-property/upload-property.helpers.js":[function(require,module,exports) {
 "use strict";
 
@@ -5201,8 +5186,7 @@ var getImages = function getImages(id) {
   });
 });
 var onSave = function onSave() {
-  var numPropertyDetail = (0, _uploadProperty3.mapPropertyDetailNums)(propertyDetail);
-  var apiPropertyDetail = (0, _uploadProperty3.mapPropertyDetailVmToApi)(numPropertyDetail);
+  var apiPropertyDetail = (0, _uploadProperty3.mapPropertyDetailVmToApi)(propertyDetail);
   return (0, _uploadProperty.setProperty)(apiPropertyDetail);
 };
 },{"../../common/helpers":"common/helpers/index.js","./upload-property.api":"pages/upload-property/upload-property.api.js","./upload-property.validations":"pages/upload-property/upload-property.validations.js","./upload-property.mappers":"pages/upload-property/upload-property.mappers.js","./upload-property.helpers":"pages/upload-property/upload-property.helpers.js"}],"../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
@@ -5230,7 +5214,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53076" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62135" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

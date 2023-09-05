@@ -265,7 +265,6 @@ onSubmitForm('save-button', () => {
 });
 
 const onSave = () => {
-  const numPropertyDetail = mapPropertyDetailNums(propertyDetail);
-  const apiPropertyDetail = mapPropertyDetailVmToApi(numPropertyDetail);
+  const apiPropertyDetail = mapPropertyDetailVmToApi(propertyDetail);
   return setProperty(apiPropertyDetail);
 };

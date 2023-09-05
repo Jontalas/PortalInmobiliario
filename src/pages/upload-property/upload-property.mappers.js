@@ -1,9 +1,20 @@
-export const mapPropertyDetailNums = (propertyDetail) => ({
-  ...propertyDetail,
+export const mapPropertyDetailVmToApi = (propertyDetail) => ({
+  title: propertyDetail.title,
+  notes: propertyDetail.notes,
+  email: propertyDetail.email,
+  phone: propertyDetail.phone,
   price: str2Nmbr(propertyDetail.price),
+  saleTypeIds: propertyDetail.saleTypes,
+  address: propertyDetail.address,
+  city: propertyDetail.city,
+  provinceId: propertyDetail.province,
   squareMeter: str2Nmbr(propertyDetail.squareMeter),
   rooms: str2Nmbr(propertyDetail.rooms),
   bathrooms: str2Nmbr(propertyDetail.bathrooms),
+  locationUrl: propertyDetail.locationUrl,
+  mainFeatures: propertyDetail.mainFeatures,
+  equipmentIds: propertyDetail.equipments,
+  images: propertyDetail.images,
 });
 
 const str2Nmbr = (valor) => {
@@ -21,22 +32,3 @@ const str2Nmbr = (valor) => {
   }
   return parseFloat(valor);
 };
-
-export const mapPropertyDetailVmToApi = (propertyDetail) => ({
-  title: propertyDetail.title,
-  notes: propertyDetail.notes,
-  email: propertyDetail.email,
-  phone: propertyDetail.phone,
-  price: propertyDetail.price,
-  saleTypeIds: propertyDetail.saleTypes,
-  address: propertyDetail.address,
-  city: propertyDetail.city,
-  provinceId: propertyDetail.province,
-  squareMeter: propertyDetail.squareMeter,
-  rooms: propertyDetail.rooms,
-  bathrooms: propertyDetail.bathrooms,
-  locationUrl: propertyDetail.locationUrl,
-  mainFeatures: propertyDetail.mainFeatures,
-  equipmentIds: propertyDetail.equipments,
-  images: propertyDetail.images,
-});

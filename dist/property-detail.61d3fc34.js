@@ -4645,8 +4645,8 @@ exports.formValidation = formValidation;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.mapPropertyApiToVm = exports.mapEquipmentListApiToVm = void 0;
-var mapPropertyApiToVm = function mapPropertyApiToVm(property) {
+exports.mapPropertyApiToVm = void 0;
+var mapPropertyApiToVm = function mapPropertyApiToVm(property, EquipmentDetails) {
   return {
     id: property.id,
     title: property.title,
@@ -4658,7 +4658,11 @@ var mapPropertyApiToVm = function mapPropertyApiToVm(property) {
     bathrooms: "".concat(property.bathrooms, " ").concat(getBathroomWord(property.bathrooms)),
     locationUrl: property.locationUrl,
     mainFeatures: property.mainFeatures,
-    equipments: property.equipmentIds,
+    equipments: EquipmentDetails.filter(function (equipment) {
+      return property.equipmentIds.includes(equipment.id);
+    }).map(function (equipment) {
+      return equipment.name;
+    }),
     mainImage: property.images[0],
     images: property.images
   };
@@ -4670,20 +4674,6 @@ var getRoomWord = function getRoomWord(rooms) {
 var getBathroomWord = function getBathroomWord(bathrooms) {
   return bathrooms > 1 ? 'baños' : 'baño';
 };
-var mapEquipmentListApiToVm = function mapEquipmentListApiToVm(equipmentIds, equipmentList) {
-  if (Array.isArray(equipmentIds)) {
-    var filtered = equipmentList.filter(function (equipment) {
-      return equipmentIds.includes(equipment.id);
-    });
-    var equipments = filtered.map(function (equipment) {
-      return equipment.name;
-    });
-    return equipments;
-  } else {
-    return [];
-  }
-};
-exports.mapEquipmentListApiToVm = mapEquipmentListApiToVm;
 },{}],"pages/property-detail/property-detail.helpers.js":[function(require,module,exports) {
 "use strict";
 
@@ -6817,8 +6807,7 @@ Promise.all([(0, _propertyDetail.getPropertyDetails)(params.id), (0, _propertyDe
   var _ref2 = _slicedToArray(_ref, 2),
     apiPropertyDetail = _ref2[0],
     apiEquipmentDetails = _ref2[1];
-  apiPropertyDetail.equipmentIds = (0, _propertyDetail2.mapEquipmentListApiToVm)(apiPropertyDetail.equipmentIds, apiEquipmentDetails);
-  propertyDetail = (0, _propertyDetail2.mapPropertyApiToVm)(apiPropertyDetail);
+  propertyDetail = (0, _propertyDetail2.mapPropertyApiToVm)(apiPropertyDetail, apiEquipmentDetails);
   (0, _propertyDetail3.setPropertyValues)(propertyDetail);
 });
 var contact = {
@@ -6880,7 +6869,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62135" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60834" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

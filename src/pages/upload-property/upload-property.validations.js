@@ -1,5 +1,4 @@
 import { Validators, createFormValidation } from '@lemoncode/fonk';
-import { arrayRequired } from '@lemoncode/fonk-array-required-validator';
 import { isUrl } from '@lemoncode/fonk-is-url-validator';
 const validationSchema = {
   field: {

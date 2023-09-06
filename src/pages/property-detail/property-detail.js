@@ -10,10 +10,7 @@ import {
   setContact,
 } from './property-detail.api';
 import { formValidation } from './property-list.validations';
-import {
-  mapPropertyApiToVm,
-  mapEquipmentListApiToVm,
-} from './property-detail.mappers';
+import { mapPropertyApiToVm } from './property-detail.mappers';
 import { setPropertyValues } from './property-detail.helpers';
 import { history } from '../../core/router';
 
@@ -37,11 +34,7 @@ const params = history.getParams();
 
 Promise.all([getPropertyDetails(params.id), getEquipmentDetails()]).then(
   ([apiPropertyDetail, apiEquipmentDetails]) => {
-    apiPropertyDetail.equipmentIds = mapEquipmentListApiToVm(
-      apiPropertyDetail.equipmentIds,
-      apiEquipmentDetails
-    );
-    propertyDetail = mapPropertyApiToVm(apiPropertyDetail);
+    propertyDetail = mapPropertyApiToVm(apiPropertyDetail, apiEquipmentDetails);
     setPropertyValues(propertyDetail);
   }
 );

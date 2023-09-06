@@ -1,4 +1,4 @@
-export const mapPropertyApiToVm = (property) => ({
+export const mapPropertyApiToVm = (property, EquipmentDetails) => ({
   id: property.id,
   title: property.title,
   notes: property.notes,
@@ -9,20 +9,12 @@ export const mapPropertyApiToVm = (property) => ({
   bathrooms: `${property.bathrooms} ${getBathroomWord(property.bathrooms)}`,
   locationUrl: property.locationUrl,
   mainFeatures: property.mainFeatures,
-  equipments: property.equipmentIds,
+  equipments: EquipmentDetails.filter((equipment) =>
+    property.equipmentIds.includes(equipment.id)
+  ).map((equipment) => equipment.name),
   mainImage: property.images[0],
   images: property.images,
 });
 
 const getRoomWord = (rooms) => (rooms > 1 ? 'habitaciones' : 'habitación');
 const getBathroomWord = (bathrooms) => (bathrooms > 1 ? 'baños' : 'baño');
-
-export const mapEquipmentListApiToVm = (equipmentIds, equipmentList) => {
-  if (Array.isArray(equipmentIds)) {
-    const filtered = equipmentList.filter(equipment => equipmentIds.includes(equipment.id));
-    const equipments = filtered.map(equipment => equipment.name);
-    return equipments;
-  } else {
-    return [];
-  }
-}

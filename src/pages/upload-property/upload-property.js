@@ -105,15 +105,11 @@ const setEventsSaleTypes = (list) => {
       const value = event.target.value;
       const isArray = Array.isArray(propertyDetail.saleTypes);
 
-      let index = -1;
-      if (isArray) {
-        index = propertyDetail.saleTypes.indexOf(value);
-      }
-      if (checked && index === -1) {
+      if (checked) {
         propertyDetail.saleTypes = isArray ? propertyDetail.saleTypes : [];
         propertyDetail.saleTypes.push(value);
-      }
-      if (!checked && index !== -1) {
+      } else {
+        const index = propertyDetail.saleTypes.indexOf(value);
         propertyDetail.saleTypes.splice(index, 1);
         propertyDetail.saleTypes =
           propertyDetail.saleTypes.length > 0 ? propertyDetail.saleTypes : '';
@@ -209,15 +205,11 @@ const setEventsEquipments = (list) => {
       const value = event.target.value;
       const isArray = Array.isArray(propertyDetail.equipments);
 
-      let index = -1;
-      if (isArray) {
-        index = propertyDetail.equipments.indexOf(value);
-      }
-      if (checked && index === -1) {
+      if (checked) {
         propertyDetail.equipments = isArray ? propertyDetail.equipments : [];
         propertyDetail.equipments.push(value);
-      }
-      if (!checked && index !== -1) {
+      } else {
+        const index = propertyDetail.equipments.indexOf(value);
         propertyDetail.equipments.splice(index, 1);
         propertyDetail.equipments =
           propertyDetail.equipments.length > 0 ? propertyDetail.equipments : '';

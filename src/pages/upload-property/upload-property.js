@@ -39,7 +39,7 @@ let propertyDetail = {
   email: '',
   phone: '',
   price: '',
-  equipments: '',
+  saleTypes: '',
   address: '',
   city: '',
   province: '',
@@ -103,24 +103,24 @@ const setEventsSaleTypes = (list) => {
     onUpdateField(id, (event) => {
       const checked = event.target.checked;
       const value = event.target.value;
-      const isArray = Array.isArray(propertyDetail.equipments);
+      const isArray = Array.isArray(propertyDetail.saleTypes);
 
       let index = -1;
       if (isArray) {
-        index = propertyDetail.equipments.indexOf(value);
+        index = propertyDetail.saleTypes.indexOf(value);
       }
       if (checked && index === -1) {
-        propertyDetail.equipments = isArray ? propertyDetail.equipments : [];
-        propertyDetail.equipments.push(value);
+        propertyDetail.saleTypes = isArray ? propertyDetail.saleTypes : [];
+        propertyDetail.saleTypes.push(value);
       }
       if (!checked && index !== -1) {
-        propertyDetail.equipments.splice(index, 1);
-        propertyDetail.equipments =
-          propertyDetail.equipments.length > 0 ? propertyDetail.equipments : '';
+        propertyDetail.saleTypes.splice(index, 1);
+        propertyDetail.saleTypes =
+          propertyDetail.saleTypes.length > 0 ? propertyDetail.saleTypes : '';
       }
 
       formValidation
-        .validateField('saleTypes', propertyDetail.equipments)
+        .validateField('saleTypes', propertyDetail.saleTypes)
         .then((result) => {
           onSetError('saleTypes', result);
         });

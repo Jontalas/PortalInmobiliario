@@ -12,23 +12,24 @@ import {
   setProperty,
 } from './upload-property.api';
 import { formValidation } from './upload-property.validations';
-import {
-  mapPropertyDetailNums,
-  mapPropertyDetailVmToApi,
-} from './upload-property.mappers';
+import { mapPropertyDetailVmToApi } from './upload-property.mappers';
 import {
   setOptionList,
   setCheckboxList,
   onAddFeature,
   onRemoveFeature,
   onAddImage,
+  formatCheckboxId,
+  formatDeleteFeatureButtonId,
 } from './upload-property.helpers';
 
 Promise.all([getSaleTypeList(), getProvinceList(), getEquipmentsList()]).then(
   ([saleTypeList, provinceList, equipmentsList]) => {
     setOptionList(provinceList, 'province');
     setCheckboxList(saleTypeList, 'saleTypes');
+    setEventsSaleTypes(saleTypeList);
     setCheckboxList(equipmentsList, 'equipments');
+    setEventsEquipments(equipmentsList);
   }
 );
 
@@ -38,7 +39,7 @@ let propertyDetail = {
   email: '',
   phone: '',
   price: '',
-  saleTypes: '',
+  equipments: '',
   address: '',
   city: '',
   province: '',
@@ -96,16 +97,36 @@ onUpdateField('price', (event) => {
   });
 });
 
-onUpdateField('saleTypes', (event) => {
-  const saleTypeArray = getCheckboxes('saleTypes');
-  propertyDetail = { ...propertyDetail, saleTypes: saleTypeArray };
+const setEventsSaleTypes = (list) => {
+  list.forEach((saleType) => {
+    const id = formatCheckboxId(saleType);
+    onUpdateField(id, (event) => {
+      const checked = event.target.checked;
+      const value = event.target.value;
+      const isArray = Array.isArray(propertyDetail.equipments);
 
-  formValidation
-    .validateField('saleTypes', propertyDetail.saleTypes)
-    .then((result) => {
-      onSetError('saleTypes', result);
+      let index = -1;
+      if (isArray) {
+        index = propertyDetail.equipments.indexOf(value);
+      }
+      if (checked && index === -1) {
+        propertyDetail.equipments = isArray ? propertyDetail.equipments : [];
+        propertyDetail.equipments.push(value);
+      }
+      if (!checked && index !== -1) {
+        propertyDetail.equipments.splice(index, 1);
+        propertyDetail.equipments =
+          propertyDetail.equipments.length > 0 ? propertyDetail.equipments : '';
+      }
+
+      formValidation
+        .validateField('saleTypes', propertyDetail.equipments)
+        .then((result) => {
+          onSetError('saleTypes', result);
+        });
     });
-});
+  });
+};
 
 onUpdateField('address', (event) => {
   const value = event.target.value;
@@ -180,59 +201,69 @@ onUpdateField('locationUrl', (event) => {
     });
 });
 
-onUpdateField('equipments', (event) => {
-  const equipmentsArray = getCheckboxes('equipments');
-  propertyDetail = { ...propertyDetail, equipments: equipmentsArray };
-});
+const setEventsEquipments = (list) => {
+  list.forEach((equipment) => {
+    const id = formatCheckboxId(equipment);
+    onUpdateField(id, (event) => {
+      const checked = event.target.checked;
+      const value = event.target.value;
+      const isArray = Array.isArray(propertyDetail.equipments);
+
+      let index = -1;
+      if (isArray) {
+        index = propertyDetail.equipments.indexOf(value);
+      }
+      if (checked && index === -1) {
+        propertyDetail.equipments = isArray ? propertyDetail.equipments : [];
+        propertyDetail.equipments.push(value);
+      }
+      if (!checked && index !== -1) {
+        propertyDetail.equipments.splice(index, 1);
+        propertyDetail.equipments =
+          propertyDetail.equipments.length > 0 ? propertyDetail.equipments : '';
+      }
+    });
+  });
+};
 
 onAddFile('add-image', (image) => {
   onAddImage(image);
-  const imagesArray = getImages('images');
-  imagesArray.pop();
-  propertyDetail = { ...propertyDetail, images: imagesArray };
+  propertyDetail.images.push(image);
 });
 
-const getCheckboxes = (id) => {
-  const checkboxes = document.querySelectorAll(`#${id} input[type="checkbox"]`);
-  let checkboxMarcados = null;
-  checkboxes.forEach((checkbox) => {
-    if (checkbox.checked) {
-      checkboxMarcados = checkboxMarcados || [];
-      checkboxMarcados.push(checkbox.value);
-    }
-  });
-  return checkboxMarcados || '';
-};
-
-const insertFeatureButton = document.getElementById('insert-feature-button');
-insertFeatureButton.addEventListener('click', () => {
+onSubmitForm('insert-feature-button', (event) => {
   const newFeature = document.getElementById('newFeature');
   const value = newFeature.value;
   if (value !== '') {
-    onAddFeature(value);
-    if (propertyDetail.mainFeatures === '') {
-      propertyDetail.mainFeatures = [];
-    }
-    propertyDetail.mainFeatures.push(value);
-    formValidation
-      .validateField('mainFeatures', propertyDetail.mainFeatures)
-      .then((result) => {
-        onSetError('mainFeatures', result);
-      });
-    const deleteButtonId = `delete-${value}-button`;
-    const deleteButton = document.getElementById(deleteButtonId);
-    deleteButton.addEventListener('click', () => {
-      onRemoveFeature(value);
-      removeFromArray(value, propertyDetail.mainFeatures);
-      if (propertyDetail.mainFeatures.length === 0) {
-        propertyDetail.mainFeatures = '';
-      }
+    const index = Array.isArray(propertyDetail.mainFeatures)
+      ? propertyDetail.mainFeatures.indexOf(value)
+      : -1;
+    if (index === -1) {
+      onAddFeature(value);
+      propertyDetail.mainFeatures = Array.isArray(propertyDetail.mainFeatures)
+        ? propertyDetail.mainFeatures
+        : [];
+      propertyDetail.mainFeatures.push(value);
       formValidation
         .validateField('mainFeatures', propertyDetail.mainFeatures)
         .then((result) => {
           onSetError('mainFeatures', result);
         });
-    });
+      const deleteButtonId = formatDeleteFeatureButtonId(value);
+      onSubmitForm(deleteButtonId, (event) => {
+        console.log('update boton');
+        onRemoveFeature(value);
+        removeFromArray(value, propertyDetail.mainFeatures);
+        if (propertyDetail.mainFeatures.length === 0) {
+          propertyDetail.mainFeatures = '';
+        }
+        formValidation
+          .validateField('mainFeatures', propertyDetail.mainFeatures)
+          .then((result) => {
+            onSetError('mainFeatures', result);
+          });
+      });
+    }
   }
 });
 
@@ -241,15 +272,6 @@ const removeFromArray = (valor, array) => {
   if (indice !== -1) {
     array.splice(indice, 1);
   }
-};
-
-const getImages = (id) => {
-  const imagenes = document.getElementById(id).getElementsByTagName('img');
-  let srcs = [];
-  for (let i = 0; i < imagenes.length; i++) {
-    srcs.push(imagenes[i].src);
-  }
-  return srcs;
 };
 
 onSubmitForm('save-button', () => {

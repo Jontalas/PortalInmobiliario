@@ -112,6 +112,11 @@ const validationSchema = {
         validator: isUrl.validator,
         message: 'URL no válida',
       },
+      {
+        validator: Validators.pattern,
+        customArgs: { pattern: '^https:\/\/www\.google\.com\/maps\/embed' },
+        message: 'URL no válida',
+      },
     ],
     mainFeatures: [
       {
